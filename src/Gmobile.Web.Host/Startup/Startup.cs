@@ -43,6 +43,7 @@ using Gmobile.Web.MultiTenancy;
 using Abp.HtmlSanitizer;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Gmobile.Web.OpenIddict;
+using Hangfire.PostgreSql;
 
 namespace Gmobile.Web.Startup
 {
@@ -135,9 +136,9 @@ namespace Gmobile.Web.Startup
                 //Hangfire(Enable to use Hangfire instead of default job manager)
                 services.AddHangfire(config =>
                 {
-                    config.UseSqlServerStorage(_appConfiguration.GetConnectionString("Default"));
+                    config.UsePostgreSqlStorage(_appConfiguration.GetConnectionString("HangFire"));
                 });
-
+                services.AddHangfireServer(options => { options.Queues = new[] { "default" }; });
                 services.AddHangfireServer();
             }
 

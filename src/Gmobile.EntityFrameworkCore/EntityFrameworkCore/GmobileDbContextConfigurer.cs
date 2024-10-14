@@ -7,12 +7,12 @@ namespace Gmobile.EntityFrameworkCore
     {
         public static void Configure(DbContextOptionsBuilder<GmobileDbContext> builder, string connectionString)
         {
-            builder.UseSqlServer(connectionString);
+            builder.UseNpgsql(connectionString);
         }
 
         public static void Configure(DbContextOptionsBuilder<GmobileDbContext> builder, DbConnection connection)
         {
-            builder.UseSqlServer(connection);
+            builder.UseNpgsql(connection);
         }
     }
 }
