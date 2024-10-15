@@ -1,37 +1,21 @@
 ﻿using System;
-using System.Reflection;
-using System.Threading;
-using System.Threading.Tasks;
-using Abp;
 using Abp.AspNetZeroCore;
 using Abp.AspNetZeroCore.Timing;
 using Abp.AutoMapper;
-using Abp.BackgroundJobs;
 using Abp.Dependency;
 using Abp.Modules;
 using Abp.Net.Mail;
 using Abp.Reflection.Extensions;
 using Abp.Timing;
 using Abp.Configuration.Startup;
-using Abp.Domain.Uow;
-using Abp.Events.Bus;
-using Abp.Events.Bus.Exceptions;
-using Abp.Json;
-using Abp.Localization.Dictionaries.Xml;
-using Abp.Localization.Sources;
 using Abp.MailKit;
 using Abp.Net.Mail.Smtp;
-using Abp.Threading;
-using Abp.Threading.BackgroundWorkers;
-using Abp.Threading.Timers;
 using Abp.Zero;
 using Abp.Zero.Configuration;
 using Abp.Zero.Ldap;
-using Abp.Zero.Ldap.Configuration;
 using Castle.MicroKernel.Registration;
 using MailKit.Security;
 using Gmobile.Authorization.Delegation;
-using Gmobile.Authorization.Ldap;
 using Gmobile.Authorization.Roles;
 using Gmobile.Authorization.Users;
 using Gmobile.Chat;
@@ -64,6 +48,9 @@ namespace Gmobile
             //workaround for issue: https://github.com/aspnet/EntityFrameworkCore/issues/9825
             //related github issue: https://github.com/aspnet/EntityFrameworkCore/issues/10407
             AppContext.SetSwitch("Microsoft.EntityFrameworkCore.Issue9825", true);
+            //Gunner fix How to say Datetime - timestamp without time zone in EF Core 6.0
+            AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+
 
             Configuration.Auditing.IsEnabledForAnonymousUsers = true;
 
