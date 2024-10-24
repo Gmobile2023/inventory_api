@@ -41,6 +41,7 @@
     <PackageReference Include="Abp.MailKit" Version="8.2.0" />
     <PackageReference Include="Abp.Zero.Ldap" Version="8.2.0" />
     <PackageReference Include="Twilio" Version="6.2.4" />
+    <PackageReference Include="OpenIddict.Core" Version="5.1.0" />
   </ItemGroup>
 
   <ItemGroup>
