@@ -135,3 +135,4 @@ src/MyCompanyName.AbpZeroTemplate.Web.Public/wwwroot/view-resources/Views/_Bundl
 src/MyCompanyName.AbpZeroTemplate.Web.Public/wwwroot/view-resources/**/*.min.*
 src/MyCompanyName.AbpZeroTemplate.Web.Public/wwwroot/Common/**/*.min.*
 src/MyCompanyName.AbpZeroTemplate.Web.Public/node_modules
+.idea/
