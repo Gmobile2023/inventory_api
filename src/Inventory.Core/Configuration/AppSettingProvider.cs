@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Abp.Configuration;
+using Abp.Extensions;
 using Abp.Json;
 using Abp.Localization;
 using Abp.Net.Mail;
 using Abp.Zero.Configuration;
 using Abp.Zero.Ldap.Configuration;
-using Castle.Core.Internal;
 using Microsoft.Extensions.Configuration;
 using Inventory.Authentication;
 using Inventory.DashboardCustomization;

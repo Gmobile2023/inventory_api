@@ -1,12 +1,9 @@
 ﻿using System.Collections.Generic;
-using System.Threading.Tasks;
 using GraphQL;
-using GraphQL.Server;
+using Inventory.Debugging;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.Extensions.DependencyInjection;
-using Inventory.Debugging;
-using Inventory.Schemas;
 
 namespace Inventory.Configure
 {
@@ -15,16 +12,15 @@ namespace Inventory.Configure
         public static void AddAndConfigureGraphQL(this IServiceCollection services)
         {
             services
-                .AddGraphQL(x => { x.EnableMetrics = DebugHelper.IsDebug; })
-                .AddNewtonsoftJson(deserializerSettings => { }, serializerSettings => { }) // For everything else
-                .AddErrorInfoProvider(opt => opt.ExposeExceptionStackTrace = DebugHelper.IsDebug)
-                .AddGraphTypes(ServiceLifetime.Scoped)
-                .AddUserContextBuilder(httpContext => new Dictionary<string, object>
-                {
-                    {"user", httpContext.User}
-                })
-                .AddNewtonsoftJson(deserializerSettings => { }, serializerSettings => { }) // For everything else
-                .AddDataLoader();
+                .AddGraphQL(x => x.AddSystemTextJson()
+                    .AddErrorInfoProvider(opt => opt.ExposeExceptionDetails = DebugHelper.IsDebug)
+                    .AddGraphTypes()
+                    .AddDataLoader()
+                    .AddUserContextBuilder(httpContext => new Dictionary<string, object>
+                    {
+                        {"user", httpContext.User}
+                    })
+                );
 
             AllowSynchronousIo(services);
         }

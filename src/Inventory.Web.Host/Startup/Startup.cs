@@ -65,10 +65,10 @@ namespace Inventory.Web.Startup
         {
             //MVC
             services.AddControllersWithViews(options =>
-            {
-                options.Filters.Add(new AbpAutoValidateAntiforgeryTokenAttribute());
-                options.AddAbpHtmlSanitizer();
-            })
+                {
+                    options.Filters.Add(new AbpAutoValidateAntiforgeryTokenAttribute());
+                    options.AddAbpHtmlSanitizer();
+                })
 #if DEBUG
                 .AddRazorRuntimeCompilation()
 #endif
@@ -209,7 +209,7 @@ namespace Inventory.Web.Startup
                 app.UseHangfireDashboard(WebConsts.HangfireDashboardEndPoint, new DashboardOptions
                 {
                     Authorization = new[]
-                        {new AbpHangfireAuthorizationFilter(AppPermissions.Pages_Administration_HangfireDashboard)}
+                        { new AbpHangfireAuthorizationFilter(AppPermissions.Pages_Administration_HangfireDashboard) }
                 });
             }
 
@@ -223,8 +223,11 @@ namespace Inventory.Web.Startup
                 app.UseGraphQL<MainSchema>();
                 if (WebConsts.GraphQL.PlaygroundEnabled)
                 {
+                    // to explorer API navigate https://*DOMAIN*/ui/playground
                     app.UseGraphQLPlayground(
-                        new GraphQLPlaygroundOptions()); //to explorer API navigate https://*DOMAIN*/ui/playground
+                        WebConsts.GraphQL.PlaygroundEndPoint,
+                        new PlaygroundOptions()
+                    );
                 }
             }
 
@@ -236,7 +239,8 @@ namespace Inventory.Web.Startup
                 endpoints.MapControllerRoute("defaultWithArea", "{area}/{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
 
-                app.ApplicationServices.GetRequiredService<IAbpAspNetCoreConfiguration>().EndpointConfiguration.ConfigureAllEndpoints(endpoints);
+                app.ApplicationServices.GetRequiredService<IAbpAspNetCoreConfiguration>().EndpointConfiguration
+                    .ConfigureAllEndpoints(endpoints);
             });
 
             if (bool.Parse(_appConfiguration["HealthChecks:HealthChecksEnabled"]))
@@ -246,7 +250,7 @@ namespace Inventory.Web.Startup
                     Predicate = _ => true,
                     ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
                 });
-                
+
                 if (bool.Parse(_appConfiguration["HealthChecks:HealthChecksUI:HealthChecksUIEnabled"]))
                 {
                     app.UseHealthChecksUI();
@@ -308,15 +312,15 @@ namespace Inventory.Web.Startup
                     var hostXmlPath = Path.Combine(AppContext.BaseDirectory, hostXmlFile);
                     options.IncludeXmlComments(hostXmlPath);
 
-                    var applicationXml = $"Inventory.Application.xml";
+                    var applicationXml = $"AuthServer.Application.xml";
                     var applicationXmlPath = Path.Combine(AppContext.BaseDirectory, applicationXml);
                     options.IncludeXmlComments(applicationXmlPath);
 
-                    var webCoreXmlFile = $"Inventory.Web.Core.xml";
+                    var webCoreXmlFile = $"AuthServer.Web.Core.xml";
                     var webCoreXmlPath = Path.Combine(AppContext.BaseDirectory, webCoreXmlFile);
                     options.IncludeXmlComments(webCoreXmlPath);
                 }
-            }).AddSwaggerGenNewtonsoftSupport();
+            });
         }
 
         private void ConfigureHealthChecks(IServiceCollection services)

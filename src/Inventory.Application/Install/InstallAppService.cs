@@ -6,6 +6,7 @@ using Abp;
 using Abp.Auditing;
 using Abp.Authorization;
 using Abp.Domain.Uow;
+using Abp.Extensions;
 using Abp.Localization;
 using Abp.Net.Mail;
 using Abp.Runtime.Security;
@@ -23,8 +24,6 @@ using Inventory.Identity;
 using Inventory.Install.Dto;
 using Inventory.Migrations.Seed;
 using Inventory.Migrations.Seed.Host;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
 namespace Inventory.Install
 {

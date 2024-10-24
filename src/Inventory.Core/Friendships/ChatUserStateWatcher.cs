@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Threading.Tasks;
 using Abp;
 using Abp.Dependency;
 using Abp.RealTime;
@@ -40,13 +41,13 @@ namespace Inventory.Friendships
             NotifyUserConnectionStateChange(e.User, false);
         }
 
-        private void NotifyUserConnectionStateChange(UserIdentifier user, bool isConnected)
+        private async Task NotifyUserConnectionStateChange(UserIdentifier user, bool isConnected)
         {
             var cacheItem = _userFriendsCache.GetCacheItem(user);
 
             foreach (var friend in cacheItem.Friends)
             {
-                var friendUserClients = _onlineClientManager.GetAllByUserId(new UserIdentifier(friend.FriendTenantId, friend.FriendUserId));
+                var friendUserClients = await _onlineClientManager.GetAllByUserIdAsync(new UserIdentifier(friend.FriendTenantId, friend.FriendUserId));
                 if (!friendUserClients.Any())
                 {
                     continue;

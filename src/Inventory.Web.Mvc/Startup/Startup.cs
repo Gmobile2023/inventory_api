@@ -112,7 +112,7 @@ namespace Inventory.Web.Startup
                 {
                     config.UsePostgreSqlStorage(_appConfiguration.GetConnectionString("Default"));
                 });
-                
+
                 services.AddHangfireServer();
             }
 
@@ -183,9 +183,9 @@ namespace Inventory.Web.Startup
 
             if (InventoryConsts.PreventNotExistingTenantSubdomains)
             {
-                app.UseMiddleware<DomainTenantCheckMiddleware>();    
+                app.UseMiddleware<DomainTenantCheckMiddleware>();
             }
-            
+
             app.UseRouting();
 
             app.UseAuthentication();
@@ -212,7 +212,7 @@ namespace Inventory.Web.Startup
                 app.UseHangfireDashboard("/hangfire", new DashboardOptions
                 {
                     Authorization = new[]
-                        {new AbpHangfireAuthorizationFilter(AppPermissions.Pages_Administration_HangfireDashboard)}
+                        { new AbpHangfireAuthorizationFilter(AppPermissions.Pages_Administration_HangfireDashboard) }
                 });
             }
 
@@ -223,11 +223,14 @@ namespace Inventory.Web.Startup
 
             if (WebConsts.GraphQL.Enabled)
             {
-                app.UseGraphQL<MainSchema>();
+                app.UseGraphQL<MainSchema>(WebConsts.GraphQL.EndPoint);
                 if (WebConsts.GraphQL.PlaygroundEnabled)
                 {
+                    // to explorer API navigate https://*DOMAIN*/ui/playground
                     app.UseGraphQLPlayground(
-                        new GraphQLPlaygroundOptions()); //to explorer API navigate https://*DOMAIN*/ui/playground
+                        WebConsts.GraphQL.PlaygroundEndPoint,
+                        new PlaygroundOptions()
+                    );
                 }
             }
 
@@ -250,7 +253,7 @@ namespace Inventory.Web.Startup
                     Predicate = _ => true,
                     ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
                 });
-                
+
                 if (bool.Parse(_appConfiguration["HealthChecks:HealthChecksUI:HealthChecksUIEnabled"]))
                 {
                     app.UseHealthChecksUI();
@@ -295,7 +298,7 @@ namespace Inventory.Web.Startup
         {
             services.AddSwaggerGen(options =>
             {
-                options.SwaggerDoc("v1", new OpenApiInfo() {Title = "Inventory API", Version = "v1"});
+                options.SwaggerDoc("v1", new OpenApiInfo() { Title = "Inventory API", Version = "v1" });
                 options.DocInclusionPredicate((docName, description) => true);
                 options.ParameterFilter<SwaggerEnumParameterFilter>();
                 options.SchemaFilter<SwaggerEnumSchemaFilter>();
@@ -305,23 +308,21 @@ namespace Inventory.Web.Startup
 
                 // Add summaries to swagger
                 var canShowSummaries = _appConfiguration.GetValue<bool>("Swagger:ShowSummaries");
-                if (!canShowSummaries)
+                if (canShowSummaries)
                 {
-                    return;
+                    var hostXmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                    var hostXmlPath = Path.Combine(AppContext.BaseDirectory, hostXmlFile);
+                    options.IncludeXmlComments(hostXmlPath);
+
+                    var applicationXml = $"AuthServer.Application.xml";
+                    var applicationXmlPath = Path.Combine(AppContext.BaseDirectory, applicationXml);
+                    options.IncludeXmlComments(applicationXmlPath);
+
+                    var webCoreXmlFile = $"AuthServer.Web.Core.xml";
+                    var webCoreXmlPath = Path.Combine(AppContext.BaseDirectory, webCoreXmlFile);
+                    options.IncludeXmlComments(webCoreXmlPath);
                 }
-
-                var mvcXmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-                var mvcXmlPath = Path.Combine(AppContext.BaseDirectory, mvcXmlFile);
-                options.IncludeXmlComments(mvcXmlPath);
-
-                var applicationXml = $"Inventory.Application.xml";
-                var applicationXmlPath = Path.Combine(AppContext.BaseDirectory, applicationXml);
-                options.IncludeXmlComments(applicationXmlPath);
-
-                var webCoreXmlFile = $"Inventory.Web.Core.xml";
-                var webCoreXmlPath = Path.Combine(AppContext.BaseDirectory, webCoreXmlFile);
-                options.IncludeXmlComments(webCoreXmlPath);
-            }).AddSwaggerGenNewtonsoftSupport();
+            });
         }
 
         private void ConfigureHealthChecks(IServiceCollection services)

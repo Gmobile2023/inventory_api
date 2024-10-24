@@ -1,18 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json.Nodes;
 using System.Threading;
 using System.Threading.Tasks;
 using GraphQL;
-using GraphQL.Conversion;
 using GraphQL.Execution;
-using GraphQL.NewtonsoftJson;
+using GraphQL.SystemTextJson;
 using GraphQL.Types;
 using GraphQL.Validation;
-using GraphQL.Validation.Complexity;
 using GraphQLParser.Exceptions;
 using Inventory.Test.Base;
-using Newtonsoft.Json.Linq;
 using Shouldly;
 
 namespace Inventory.GraphQL.Tests
@@ -31,15 +29,15 @@ namespace Inventory.GraphQL.Tests
 
         public IDocumentExecuter Executer { get; }
 
-        public IDocumentWriter Writer { get; }
+        public IGraphQLTextSerializer Writer { get; }
 
         public GraphQLTestBase()
         {
             Schema = Resolve<TSchema>();
 
-            Executer = new DocumentExecuter(new TDocumentBuilder(), new DocumentValidator(), new ComplexityAnalyzer());
+            Executer = new DocumentExecuter(new TDocumentBuilder(), new DocumentValidator());
 
-            Writer = new DocumentWriter(indent: true);
+            Writer = new GraphQLSerializer(indent: true);
         }
 
         public async Task<ExecutionResult> AssertQuerySuccessAsync(
@@ -94,20 +92,19 @@ namespace Inventory.GraphQL.Tests
                 options.Schema = Schema;
                 options.Query = query;
                 options.Root = root;
-                options.Inputs = inputs;
+                options.Variables = inputs;
                 options.UserContext = userContext;
                 options.CancellationToken = cancellationToken;
             });
 
-            var actualResult = await Writer
-                .WriteToStringAsync(renderErrors
-                    ? executionResult
-                    : new ExecutionResult
-                    {
-                        Data = executionResult.Data
-                    });
+            var actualResult = Writer.Serialize(renderErrors
+                ? executionResult
+                : new ExecutionResult
+                {
+                    Data = executionResult.Data
+                });
 
-            var expectedResult = await Writer.WriteToStringAsync(expectedExecutionResult);
+            var expectedResult = Writer.Serialize(expectedExecutionResult);
 
             actualResult.ShouldBe(expectedResult);
 
@@ -135,16 +132,15 @@ namespace Inventory.GraphQL.Tests
                 options.Schema = Schema;
                 options.Query = query;
                 options.Root = root;
-                options.Inputs = inputs;
+                options.Variables = inputs;
                 options.UserContext = userContext;
                 options.CancellationToken = cancellationToken;
                 options.ValidationRules = rules;
-                options.NameConverter = new CamelCaseNameConverter();
             });
 
-            var actualResult = await Writer.WriteToStringAsync(executionResult);
+            var actualResult = Writer.Serialize(executionResult);
 
-            var expectedResult = await Writer.WriteToStringAsync(expectedExecutionResult);
+            var expectedResult = Writer.Serialize(expectedExecutionResult.Data);
 
             string additionalInfo = null;
 
@@ -166,7 +162,7 @@ namespace Inventory.GraphQL.Tests
 
             if (!string.IsNullOrWhiteSpace(result))
             {
-                data = JObject.Parse(result);
+                data = JsonNode.Parse(result);
             }
 
             return new ExecutionResult

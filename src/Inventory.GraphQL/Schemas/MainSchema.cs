@@ -3,6 +3,8 @@ using GraphQL.Types;
 using GraphQL.Utilities;
 using Inventory.Queries.Container;
 using System;
+using GraphQL.Conversion;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Inventory.Schemas
 {
@@ -12,6 +14,7 @@ namespace Inventory.Schemas
             base(provider)
         {
             Query = provider.GetRequiredService<QueryContainer>();
+            NameConverter = new CamelCaseNameConverter();
         }
     }
 }
