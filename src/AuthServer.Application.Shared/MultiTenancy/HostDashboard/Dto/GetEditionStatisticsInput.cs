@@ -1,6 +1,0 @@
-﻿namespace AuthServer.MultiTenancy.HostDashboard.Dto
-{
-    public class GetEditionStatisticsInput : DashboardInputBase
-    {
-    }
-}

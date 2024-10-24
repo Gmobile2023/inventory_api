@@ -55,7 +55,6 @@
 	"navigationPropertyTemplates":[
     		{
     			"placeholder" : "{{Import_Lookup_Tables_Here}}",
-				"condition": "'{{NP_Duplication_Number_Here}}' == ''",
     			"templates" : [
     					{
     					"relation" : "single",
@@ -67,7 +66,6 @@
     		},
             {
     			"placeholder" : "{{Declare_Lookup_Tables_Here}}",
-				"condition": "'{{NP_Duplication_Number_Here}}' == ''",
     			"templates" : [
     					{
     					"relation" : "single",

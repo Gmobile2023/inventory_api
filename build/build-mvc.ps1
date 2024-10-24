@@ -3,8 +3,8 @@
 $buildFolder = (Get-Item -Path "./" -Verbose).FullName
 $slnFolder = Join-Path $buildFolder "../"
 $outputFolder = Join-Path $buildFolder "outputs"
-$webMvcFolder = Join-Path $slnFolder "src/MateWorkx.Web.Mvc"
-$webPublicFolder = Join-Path $slnFolder "src/MateWorkx.Web.Public"
+$webMvcFolder = Join-Path $slnFolder "src/MyCompanyName.AbpZeroTemplate.Web.Mvc"
+$webPublicFolder = Join-Path $slnFolder "src/MyCompanyName.AbpZeroTemplate.Web.Public"
 
 ## CLEAR ######################################################################
 
@@ -14,7 +14,7 @@ New-Item -Path $outputFolder -ItemType Directory
 ## RESTORE NUGET PACKAGES #####################################################
 
 Set-Location $slnFolder
-dotnet restore MateWorkx.Web.sln
+dotnet restore MyCompanyName.AbpZeroTemplate.Web.sln
 
 ## PUBLISH WEB MVC PROJECT ####################################################
 

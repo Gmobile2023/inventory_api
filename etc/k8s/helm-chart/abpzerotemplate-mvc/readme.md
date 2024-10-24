@@ -13,6 +13,6 @@ helm uninstall anz
 ## Create Images
 
 ```bash
-docker build -t abpzerotemplate-mvc -f src\MateWorkx.Web.Mvc\Dockerfile .
-docker build -t abpzerotemplate-migrator -f src\MateWorkx.Migrator\Dockerfile .
+docker build -t abpzerotemplate-mvc -f src\MyCompanyName.AbpZeroTemplate.Web.Mvc\Dockerfile .
+docker build -t abpzerotemplate-migrator -f src\MyCompanyName.AbpZeroTemplate.Migrator\Dockerfile .
 ```

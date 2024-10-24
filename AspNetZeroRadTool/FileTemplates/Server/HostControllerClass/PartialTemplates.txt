@@ -75,19 +75,7 @@
 					}
 				]
 		}
-	],
-"conditionalTemplates":[
-		{
-            "placeholder": "{{Overridable_Entity_Base_Here}}",
-            "condition": "{{Generate_Overridable_Entity_Here}} == true",
-            "content": "Base"
-        },
-        {
-            "placeholder": "{{Overridable_Entity_Abstract_Here}}",
-            "condition": "{{Generate_Overridable_Entity_Here}} == true",
-            "content": " abstract"
-        }
-	]    
+	]
 }
 
 

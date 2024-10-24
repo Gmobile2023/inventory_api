@@ -7,10 +7,10 @@ services:
     container_name: mycompanynameabpzerotemplatemigrator_container
     build:
       context: ../../
-      dockerfile: src/MateWorkx.Migrator/Dockerfile
+      dockerfile: src/MyCompanyName.AbpZeroTemplate.Migrator/Dockerfile
     environment:
       - ASPNETCORE_Docker_Enabled=true
-      - ConnectionStrings__Default=Server=mssqlDb;Database=MateWorkxDb;User=sa;Password=Super_Encrypted_Passw0rd!
+      - ConnectionStrings__Default=Server=mssqlDb;Database=AbpZeroTemplateDb;User=sa;Password=Super_Encrypted_Passw0rd!
     networks:
       - mycompanyname.abpzerotemplate
       

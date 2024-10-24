@@ -1,6 +1,4 @@
-﻿//TODO: CONFIGURE FOR NON-MULTILINGUAL
-
-{{Enum_Using_Looped_Template_Here}}
+﻿{{Enum_Using_Looped_Template_Here}}
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -29,7 +27,14 @@ namespace {{Namespace_Here}}.Tests.{{Namespace_Relative_Full_Here}}
 
         private void SeedTestData()
         {            
-            {{Seed_Entity_Data}}
+            var currentTenant = GetCurrentTenant();
+            
+            var {{entity_Name_Here}} = new {{Entity_Name_Here}}
+            {
+                {{Seed_Default_Value}}
+                Id = _{{entity_Name_Here}}TestId,
+                TenantId = currentTenant.Id
+            };
             
             UsingDbContext(context =>
             {
