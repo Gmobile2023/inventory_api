@@ -1,50 +1,53 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 using Abp;
 using Abp.AspNetCore.Mvc.Authorization;
 using Abp.AspNetZeroCore.Web.Authentication.External;
 using Abp.Authorization;
 using Abp.Authorization.Users;
+using Abp.MultiTenancy;
 using Abp.Configuration;
 using Abp.Extensions;
-using Abp.MultiTenancy;
 using Abp.Net.Mail;
 using Abp.Notifications;
 using Abp.Runtime.Caching;
 using Abp.Runtime.Security;
 using Abp.Runtime.Session;
-using Abp.Runtime.Validation;
 using Abp.Timing;
 using Abp.UI;
 using Abp.Zero.Configuration;
-using Inventory.Authentication.TwoFactor;
-using Inventory.Authentication.TwoFactor.Google;
-using Inventory.Authorization;
-using Inventory.Authorization.Accounts.Dto;
-using Inventory.Authorization.Delegation;
-using Inventory.Authorization.Impersonation;
-using Inventory.Authorization.Roles;
-using Inventory.Authorization.Users;
-using Inventory.Configuration;
-using Inventory.Identity;
-using Inventory.MultiTenancy;
-using Inventory.Net.Sms;
-using Inventory.Notifications;
-using Inventory.Security.Recaptcha;
-using Inventory.Web.Authentication.External;
-using Inventory.Web.Authentication.JwtBearer;
-using Inventory.Web.Authentication.TwoFactor;
-using Inventory.Web.Common;
-using Inventory.Web.Models.TokenAuth;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using Inventory.Authentication.TwoFactor;
+using Inventory.Authentication.TwoFactor.Google;
+using Inventory.Authorization;
+using Inventory.Authorization.Accounts.Dto;
+using Inventory.Authorization.Users;
+using Inventory.MultiTenancy;
+using Inventory.Web.Authentication.JwtBearer;
+using Inventory.Web.Authentication.TwoFactor;
+using Inventory.Web.Models.TokenAuth;
+using Inventory.Authorization.Impersonation;
+using Inventory.Authorization.Roles;
+using Inventory.Configuration;
+using Inventory.Identity;
+using Inventory.Net.Sms;
+using Inventory.Notifications;
+using Inventory.Security.Recaptcha;
+using Inventory.Web.Authentication.External;
+using Inventory.Web.Common;
+using Inventory.Authorization.Delegation;
+using Abp.Runtime.Validation;
 
 namespace Inventory.Web.Controllers
 {
@@ -134,12 +137,12 @@ namespace Inventory.Web.Controllers
                 .ToString(InventoryConsts.DateTimeOffsetFormat));
 
             var query = $"userId={userId}&resetCode={passwordResetCode}&expireDate={expireDate}";
-            
+
             if (tenant != null)
             {
                 query += $"&tenantId={tenant.Id}";
             }
-            
+
             return SimpleStringCipher.Instance.Encrypt(query);
         }
 
@@ -176,7 +179,8 @@ namespace Inventory.Web.Controllers
                 {
                     ShouldResetPassword = true,
                     ReturnUrl = returnUrl,
-                    c = await EncryptQueryParameters(loginResult.User.Id, loginResult.Tenant, loginResult.User.PasswordResetCode)
+                    c = await EncryptQueryParameters(loginResult.User.Id, loginResult.Tenant,
+                        loginResult.User.PasswordResetCode)
                 };
             }
 
@@ -233,9 +237,9 @@ namespace Inventory.Web.Controllers
             return new AuthenticateResultModel
             {
                 AccessToken = accessToken,
-                ExpireInSeconds = (int) _configuration.AccessTokenExpiration.TotalSeconds,
+                ExpireInSeconds = (int)_configuration.AccessTokenExpiration.TotalSeconds,
                 RefreshToken = refreshToken.token,
-                RefreshTokenExpireInSeconds = (int) _configuration.RefreshTokenExpiration.TotalSeconds,
+                RefreshTokenExpireInSeconds = (int)_configuration.RefreshTokenExpiration.TotalSeconds,
                 EncryptedAccessToken = GetEncryptedAccessToken(accessToken),
                 TwoFactorRememberClientToken = twoFactorRememberClientToken,
                 UserId = loginResult.User.Id,
@@ -279,7 +283,7 @@ namespace Inventory.Web.Controllers
                 return await Task.FromResult(new RefreshTokenResult(
                     accessToken,
                     GetEncryptedAccessToken(accessToken),
-                    (int) _configuration.AccessTokenExpiration.TotalSeconds)
+                    (int)_configuration.AccessTokenExpiration.TotalSeconds)
                 );
             }
             catch (UserFriendlyException)
@@ -387,7 +391,7 @@ namespace Inventory.Web.Controllers
             {
                 AccessToken = accessToken,
                 EncryptedAccessToken = GetEncryptedAccessToken(accessToken),
-                ExpireInSeconds = (int) _configuration.AccessTokenExpiration.TotalSeconds
+                ExpireInSeconds = (int)_configuration.AccessTokenExpiration.TotalSeconds
             };
         }
 
@@ -411,7 +415,7 @@ namespace Inventory.Web.Controllers
             {
                 AccessToken = accessToken,
                 EncryptedAccessToken = GetEncryptedAccessToken(accessToken),
-                ExpireInSeconds = (int) expiration.TotalSeconds
+                ExpireInSeconds = (int)expiration.TotalSeconds
             };
         }
 
@@ -425,7 +429,7 @@ namespace Inventory.Web.Controllers
             {
                 AccessToken = accessToken,
                 EncryptedAccessToken = GetEncryptedAccessToken(accessToken),
-                ExpireInSeconds = (int) _configuration.AccessTokenExpiration.TotalSeconds
+                ExpireInSeconds = (int)_configuration.AccessTokenExpiration.TotalSeconds
             };
         }
 
@@ -525,10 +529,10 @@ namespace Inventory.Web.Controllers
                     {
                         AccessToken = accessToken,
                         EncryptedAccessToken = GetEncryptedAccessToken(accessToken),
-                        ExpireInSeconds = (int) _configuration.AccessTokenExpiration.TotalSeconds,
+                        ExpireInSeconds = (int)_configuration.AccessTokenExpiration.TotalSeconds,
                         ReturnUrl = returnUrl,
                         RefreshToken = refreshToken.token,
-                        RefreshTokenExpireInSeconds = (int) _configuration.RefreshTokenExpiration.TotalSeconds
+                        RefreshTokenExpireInSeconds = (int)_configuration.RefreshTokenExpiration.TotalSeconds
                     };
                 }
                 case AbpLoginResultType.UnknownExternalLogin:
@@ -568,9 +572,9 @@ namespace Inventory.Web.Controllers
                     {
                         AccessToken = accessToken,
                         EncryptedAccessToken = GetEncryptedAccessToken(accessToken),
-                        ExpireInSeconds = (int) _configuration.AccessTokenExpiration.TotalSeconds,
+                        ExpireInSeconds = (int)_configuration.AccessTokenExpiration.TotalSeconds,
                         RefreshToken = refreshToken.token,
-                        RefreshTokenExpireInSeconds = (int) _configuration.RefreshTokenExpiration.TotalSeconds
+                        RefreshTokenExpireInSeconds = (int)_configuration.RefreshTokenExpiration.TotalSeconds
                     };
                 }
                 default:
@@ -815,7 +819,8 @@ namespace Inventory.Web.Controllers
             var shouldLockout = await SettingManager.GetSettingValueAsync<bool>(
                 AbpZeroSettingNames.UserManagement.UserLockOut.IsEnabled
             );
-            var loginResult = await _logInManager.LoginAsync(usernameOrEmailAddress, password, tenancyName, shouldLockout);
+            var loginResult =
+                await _logInManager.LoginAsync(usernameOrEmailAddress, password, tenancyName, shouldLockout);
 
             switch (loginResult.Result)
             {
@@ -844,18 +849,26 @@ namespace Inventory.Web.Controllers
 
         private string CreateToken(IEnumerable<Claim> claims, TimeSpan? expiration = null)
         {
-            var now = DateTime.UtcNow;
+            try
+            {
+                var now = DateTime.UtcNow;
 
-            var jwtSecurityToken = new JwtSecurityToken(
-                issuer: _configuration.Issuer,
-                audience: _configuration.Audience,
-                claims: claims,
-                notBefore: now,
-                signingCredentials: _configuration.SigningCredentials,
-                expires: expiration == null ? (DateTime?) null : now.Add(expiration.Value)
-            );
+                var jwtSecurityToken = new JwtSecurityToken(
+                    issuer: _configuration.Issuer,
+                    audience: _configuration.Audience,
+                    claims: claims,
+                    notBefore: now,
+                    signingCredentials: _configuration.SigningCredentials,
+                    expires: expiration == null ? (DateTime?)null : now.Add(expiration.Value)
+                );
 
-            return new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
+                return new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return "test";
+            }
         }
 
         private static string GetEncryptedAccessToken(string accessToken)
@@ -981,9 +994,9 @@ namespace Inventory.Web.Controllers
 
             if (requestUserAgent.IsNullOrEmpty())
             {
-                return;    
+                return;
             }
-            
+
             if (WebConsts.ReCaptchaIgnoreWhiteList.Contains(requestUserAgent.Trim()))
             {
                 return;

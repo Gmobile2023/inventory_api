@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -50,7 +51,14 @@ namespace Inventory.Web.OpenIddict
                     ClientId = clientId,
                     ClientSecret = child["ClientSecret"],
                     ConsentType = child["ConsentType"],
-                    DisplayName = child["DisplayName"]
+                    DisplayName = child["DisplayName"],
+                    Settings =
+                    {
+                        [OpenIddictConstants.Settings.TokenLifetimes.AccessToken] =
+                            TimeSpan.FromMinutes(10).ToString("c", CultureInfo.InvariantCulture),
+                        [OpenIddictConstants.Settings.TokenLifetimes.RefreshToken] = 
+                            TimeSpan.FromDays(7).ToString("c", CultureInfo.InvariantCulture)
+                    }
                 };
 
                 AddItemsFromConfiguration(child, "Scopes",
@@ -81,7 +89,7 @@ namespace Inventory.Web.OpenIddict
             var unitOfWorkManager = scope.ServiceProvider.GetRequiredService<IUnitOfWorkManager>();
 
             var scopes = child.GetSection("Scopes").GetChildren().Select(c => c.Value).ToList();
-            
+
             foreach (var scopeName in scopes)
             {
                 await unitOfWorkManager.WithUnitOfWorkAsync(async () =>
