@@ -9,13 +9,24 @@ using Inventory.Friendships;
 using Inventory.MultiTenancy;
 using Inventory.MultiTenancy.Accounting;
 using Inventory.MultiTenancy.Payments;
+using Inventory.OpenIddict.Applications;
+using Inventory.OpenIddict.Authorizations;
+using Inventory.OpenIddict.Scopes;
+using Inventory.OpenIddict.Tokens;
 using Inventory.Storage;
 
 namespace Inventory.EntityFrameworkCore
 {
-    public class InventoryDbContext : AbpZeroDbContext<Tenant, Role, User, InventoryDbContext>
+    public class InventoryDbContext : AbpZeroDbContext<Tenant, Role, User, InventoryDbContext>, IOpenIddictDbContext
     {
         /* Define an IDbSet for each entity of the application */
+        public virtual DbSet<OpenIddictApplication> Applications { get; }
+        
+        public virtual DbSet<OpenIddictAuthorization> Authorizations { get; }
+        
+        public virtual DbSet<OpenIddictScope> Scopes { get; }
+        
+        public virtual DbSet<OpenIddictToken> Tokens { get; }
 
         public virtual DbSet<BinaryObject> BinaryObjects { get; set; }
 
@@ -33,23 +44,19 @@ namespace Inventory.EntityFrameworkCore
         public virtual DbSet<SubscriptionPaymentExtensionData> SubscriptionPaymentExtensionDatas { get; set; }
 
         public virtual DbSet<UserDelegation> UserDelegations { get; set; }
-        
+
         public virtual DbSet<RecentPassword> RecentPasswords { get; set; }
 
         public InventoryDbContext(DbContextOptions<InventoryDbContext> options)
             : base(options)
         {
-
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<BinaryObject>(b =>
-            {
-                b.HasIndex(e => new { e.TenantId });
-            });
+            modelBuilder.Entity<BinaryObject>(b => { b.HasIndex(e => new { e.TenantId }); });
 
             modelBuilder.Entity<ChatMessage>(b =>
             {
@@ -92,6 +99,8 @@ namespace Inventory.EntityFrameworkCore
                 b.HasIndex(e => new { e.TenantId, e.SourceUserId });
                 b.HasIndex(e => new { e.TenantId, e.TargetUserId });
             });
+            
+            modelBuilder.ConfigureOpenIddict();
         }
     }
 }

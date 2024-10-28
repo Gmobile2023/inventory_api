@@ -45,6 +45,8 @@ using Microsoft.AspNetCore.Server.Kestrel.Https;
 using Inventory.Web.MultiTenancy;
 using Abp.HtmlSanitizer;
 using Hangfire.PostgreSql;
+using Inventory.Web.OpenIddict;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace Inventory.Web.Startup
 {
@@ -104,6 +106,20 @@ namespace Inventory.Web.Startup
 
             IdentityRegistrar.Register(services);
             AuthConfigurer.Configure(services, _appConfiguration);
+            if (bool.Parse(_appConfiguration["OpenIddict:IsEnabled"]))
+            {
+                OpenIddictRegistrar.Register(services, _appConfiguration);
+
+                services.Configure<CookieAuthenticationOptions>(IdentityConstants.ApplicationScheme,
+                    options => { options.LoginPath = "/Ui/Login"; });
+            }
+            else
+            {
+                services.Configure<SecurityStampValidatorOptions>(opts =>
+                {
+                    opts.OnRefreshingPrincipal = SecurityStampValidatorCallback.UpdatePrincipal;
+                });
+            }
 
             services.Configure<SecurityStampValidatorOptions>(opts =>
             {
@@ -191,6 +207,11 @@ namespace Inventory.Web.Startup
 
             app.UseAuthentication();
             app.UseJwtTokenMiddleware();
+            
+            if (bool.Parse(_appConfiguration["OpenIddict:IsEnabled"]))
+            {
+                app.UseAbpOpenIddictValidation();
+            }
 
             app.UseAuthorization();
 

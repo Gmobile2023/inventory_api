@@ -1,52 +1,50 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
-using System.Web;
 using Abp;
 using Abp.AspNetCore.Mvc.Authorization;
 using Abp.AspNetZeroCore.Web.Authentication.External;
 using Abp.Authorization;
 using Abp.Authorization.Users;
-using Abp.MultiTenancy;
 using Abp.Configuration;
 using Abp.Extensions;
+using Abp.MultiTenancy;
 using Abp.Net.Mail;
 using Abp.Notifications;
 using Abp.Runtime.Caching;
 using Abp.Runtime.Security;
 using Abp.Runtime.Session;
+using Abp.Runtime.Validation;
 using Abp.Timing;
 using Abp.UI;
 using Abp.Zero.Configuration;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
 using Inventory.Authentication.TwoFactor;
 using Inventory.Authentication.TwoFactor.Google;
 using Inventory.Authorization;
 using Inventory.Authorization.Accounts.Dto;
-using Inventory.Authorization.Users;
-using Inventory.MultiTenancy;
-using Inventory.Web.Authentication.JwtBearer;
-using Inventory.Web.Authentication.TwoFactor;
-using Inventory.Web.Models.TokenAuth;
+using Inventory.Authorization.Delegation;
 using Inventory.Authorization.Impersonation;
 using Inventory.Authorization.Roles;
+using Inventory.Authorization.Users;
 using Inventory.Configuration;
 using Inventory.Identity;
+using Inventory.MultiTenancy;
 using Inventory.Net.Sms;
 using Inventory.Notifications;
 using Inventory.Security.Recaptcha;
 using Inventory.Web.Authentication.External;
+using Inventory.Web.Authentication.JwtBearer;
+using Inventory.Web.Authentication.TwoFactor;
 using Inventory.Web.Common;
-using Inventory.Authorization.Delegation;
+using Inventory.Web.Models.TokenAuth;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Inventory.Web.Controllers
 {
@@ -254,9 +252,10 @@ namespace Inventory.Web.Controllers
             }
 
             var (isRefreshTokenValid, principal) = await IsRefreshTokenValid(refreshToken);
+
             if (!isRefreshTokenValid)
             {
-                throw new ValidationException("Refresh token is not valid!");
+                throw new AbpValidationException("Refresh token is not valid!");
             }
 
             try
@@ -264,11 +263,6 @@ namespace Inventory.Web.Controllers
                 var user = await _userManager.GetUserAsync(
                     UserIdentifier.Parse(principal.Claims.First(x => x.Type == AppConsts.UserIdentifier).Value)
                 );
-
-                if (user == null)
-                {
-                    throw new UserFriendlyException("Unknown user or user identifier");
-                }
 
                 if (AllowOneConcurrentLoginPerUser())
                 {
@@ -294,7 +288,7 @@ namespace Inventory.Web.Controllers
             }
             catch (Exception e)
             {
-                throw new ValidationException("Refresh token is not valid!", e);
+                throw new AbpValidationException("Refresh token is not valid!" + e);
             }
         }
 
@@ -305,7 +299,7 @@ namespace Inventory.Web.Controllers
 
 
         [HttpGet]
-        [AbpMvcAuthorize]
+        [AbpAuthorize]
         public async Task LogOut()
         {
             if (AbpSession.UserId != null)
@@ -984,8 +978,13 @@ namespace Inventory.Web.Controllers
         private async Task ValidateReCaptcha(string captchaResponse)
         {
             var requestUserAgent = Request.Headers["User-Agent"].ToString();
-            if (!requestUserAgent.IsNullOrWhiteSpace() &&
-                WebConsts.ReCaptchaIgnoreWhiteList.Contains(requestUserAgent.Trim()))
+
+            if (requestUserAgent.IsNullOrEmpty())
+            {
+                return;    
+            }
+            
+            if (WebConsts.ReCaptchaIgnoreWhiteList.Contains(requestUserAgent.Trim()))
             {
                 return;
             }

@@ -1,6 +1,6 @@
 {
   "profiles": {
-    "MyCompanyName.AbpZeroTemplate.Migrator": {
+    "Inventory.Migrator": {
       "commandName": "Project"
     },
     "Docker": {
