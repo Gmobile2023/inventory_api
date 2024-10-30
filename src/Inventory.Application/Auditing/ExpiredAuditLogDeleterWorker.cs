@@ -6,7 +6,6 @@ using Abp.Auditing;
 using Abp.Dependency;
 using Abp.Domain.Repositories;
 using Abp.Domain.Uow;
-using Abp.EntityFrameworkCore.EFPlus;
 using Abp.Logging;
 using Abp.Threading;
 using Abp.Threading.BackgroundWorkers;
@@ -144,7 +143,7 @@ namespace Inventory.Auditing
                 }
 
                 //will not delete the logs from database if backup operation throws an exception
-                AsyncHelper.RunSync(() => _auditLogRepository.BatchDeleteAsync(expression));
+                AsyncHelper.RunSync(() => _auditLogRepository.DeleteAsync(expression));
             }
 
             if (expiredEntryCount > MaxDeletionCount)

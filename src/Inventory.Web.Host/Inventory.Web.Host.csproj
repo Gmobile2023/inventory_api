@@ -3,7 +3,7 @@
     <Import Project="..\..\common.props"></Import>
 
     <PropertyGroup>
-        <TargetFramework>net7.0</TargetFramework>
+        <TargetFramework>net8.0</TargetFramework>
         <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
         <PreserveCompilationContext>true</PreserveCompilationContext>
         <AssemblyName>Inventory.Web.Host</AssemblyName>
@@ -48,11 +48,12 @@
 
     <ItemGroup>
         <PackageReference Include="Abp.Castle.Log4Net" Version="8.2.0" />
-        <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.17.0" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.5">
+        <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.21.0" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.8">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
+        <PackageReference Include="Castle.Windsor" Version="6.0.0" />
     </ItemGroup>
 
     <ItemGroup>

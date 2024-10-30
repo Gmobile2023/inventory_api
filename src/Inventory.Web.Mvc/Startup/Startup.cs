@@ -227,7 +227,9 @@ namespace Inventory.Web.Startup
                 if (WebConsts.GraphQL.PlaygroundEnabled)
                 {
                     app.UseGraphQLPlayground(
-                        new GraphQLPlaygroundOptions()); //to explorer API navigate https://*DOMAIN*/ui/playground
+                        WebConsts.GraphQL.PlaygroundEndPoint,
+                        new PlaygroundOptions()
+                    ); //to explorer API navigate https://*DOMAIN*/ui/playground
                 }
             }
 

@@ -1,8 +1,8 @@
-﻿using Abp.Dependency;
+﻿using System;
+using Abp.Dependency;
 using GraphQL.Types;
-using GraphQL.Utilities;
 using Inventory.Queries.Container;
-using System;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Inventory.Schemas
 {

@@ -3,7 +3,7 @@
   <Import Project="..\..\common.props"></Import>
   
   <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
     <AssemblyName>Inventory.GraphQL.Test.Base</AssemblyName>
     <PackageId>Inventory.GraphQL.Test.Base</PackageId>
@@ -31,6 +31,7 @@
     </PackageReference>
     <PackageReference Include="Shouldly" Version="4.1.0" />
     <PackageReference Include="NSubstitute" Version="4.3.0" />
+    <PackageReference Include="Castle.Windsor" Version="6.0.0" />
   </ItemGroup>
   
   <ItemGroup>
