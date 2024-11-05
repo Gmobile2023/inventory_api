@@ -1,4 +1,4 @@
-﻿namespace HLS.Topup.Address
+﻿namespace Inventory.Address
 {
     public class CityConsts
     {

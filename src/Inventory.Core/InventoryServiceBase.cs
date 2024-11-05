@@ -1,4 +1,5 @@
 ﻿using Abp;
+using Abp.Application.Services;
 
 namespace Inventory
 {
@@ -9,7 +10,7 @@ namespace Inventory
     /// For domain services inherit <see cref="InventoryDomainServiceBase"/>.
     /// For application services inherit InventoryAppServiceBase.
     /// </summary>
-    public abstract class InventoryServiceBase : AbpServiceBase
+    public abstract class InventoryServiceBase : ApplicationService
     {
         protected InventoryServiceBase()
         {

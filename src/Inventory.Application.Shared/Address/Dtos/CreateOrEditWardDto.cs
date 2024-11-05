@@ -1,10 +1,8 @@
-﻿using HLS.Topup.Common;
-
-using System;
+﻿using System.ComponentModel.DataAnnotations;
 using Abp.Application.Services.Dto;
-using System.ComponentModel.DataAnnotations;
+using Inventory.Common;
 
-namespace HLS.Topup.Address.Dtos
+namespace Inventory.Address.Dtos
 {
     public class CreateOrEditWardDto : EntityDto<int?>
     {

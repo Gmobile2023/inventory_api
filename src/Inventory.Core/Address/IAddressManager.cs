@@ -1,8 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using HLS.Topup.Dtos.Sale;
 
-namespace HLS.Topup.Address
+namespace Inventory.Address
 {
     public interface IAddressManager
     {
@@ -28,6 +27,5 @@ namespace HLS.Topup.Address
         Task<List<Ward>> GetWardByDistrictCacheAsync(string districtcode);
         Task<Ward> GetWardByIdCacheAsync(int wardId);
         Task<Ward> GetWardByCodeCacheAsync(string wardcode);
-        Task<List<AddressSaleDto>> GetAddressFullSale(List<int> wardIds);
     }
 }

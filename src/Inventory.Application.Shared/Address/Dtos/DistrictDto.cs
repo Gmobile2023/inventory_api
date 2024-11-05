@@ -1,8 +1,7 @@
-﻿using HLS.Topup.Common;
-using System;
-using Abp.Application.Services.Dto;
+﻿using Abp.Application.Services.Dto;
+using Inventory.Common;
 
-namespace HLS.Topup.Address.Dtos
+namespace Inventory.Address.Dtos
 {
     public class DistrictDto : EntityDto
     {

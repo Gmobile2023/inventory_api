@@ -1,4 +1,4 @@
-﻿namespace HLS.Topup.Address.Dtos
+﻿namespace Inventory.Address.Dtos
 {
     public class GetDistrictForViewDto
     {

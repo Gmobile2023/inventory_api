@@ -1,11 +1,10 @@
-﻿using HLS.Topup.Common;
-using System;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Abp.Domain.Entities.Auditing;
 using Abp.Domain.Entities;
+using Abp.Domain.Entities.Auditing;
+using Inventory.Common;
 
-namespace HLS.Topup.Address
+namespace Inventory.Address
 {
 	[Table("Countries")]
     public class Country : AuditedEntity , IMayHaveTenant

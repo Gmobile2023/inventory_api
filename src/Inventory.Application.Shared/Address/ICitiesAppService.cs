@@ -1,13 +1,12 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Abp.Application.Services;
 using Abp.Application.Services.Dto;
 using HLS.Topup.Address.Dtos;
-using HLS.Topup.Dto;
-using System.Collections.Generic;
+using Inventory.Address.Dtos;
+using Inventory.Dto;
 
-
-namespace HLS.Topup.Address
+namespace Inventory.Address
 {
     public interface ICitiesAppService : IApplicationService 
     {
@@ -21,7 +20,7 @@ namespace HLS.Topup.Address
 
 		Task Delete(EntityDto input);
 
-		Task<FileDto> GetCitiesToExcel(GetAllCitiesForExcelInput input);
+		// Task<FileDto> GetCitiesToExcel(GetAllCitiesForExcelInput input);
 
 		
 		Task<List<CityCountryLookupTableDto>> GetAllCountryForTableDropdown();

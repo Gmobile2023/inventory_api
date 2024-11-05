@@ -1,6 +1,4 @@
-﻿using Abp.Application.Services.Dto;
-
-namespace HLS.Topup.Address.Dtos
+﻿namespace Inventory.Address.Dtos
 {
     public class WardDistrictLookupTableDto
     {

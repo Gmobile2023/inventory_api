@@ -1,17 +1,16 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Dynamic.Core;
 using System.Threading.Tasks;
 using Abp.Domain.Repositories;
 using Abp.Runtime.Caching;
-using HLS.Topup.Common;
-using HLS.Topup.Dtos.Sale;
+using AutoMapper.Internal.Mappers;
+using Inventory.Common;
 using Microsoft.EntityFrameworkCore;
 
-namespace HLS.Topup.Address
+namespace Inventory.Address
 {
-    public class AddressManager : TopupDomainServiceBase, IAddressManager
+    public class AddressManager : InventoryDomainServiceBase, IAddressManager
     {
         private readonly IRepository<City> _cityRepository;
         private readonly ICacheManager _cacheManager;
@@ -149,18 +148,6 @@ namespace HLS.Topup.Address
             return list.FirstOrDefault(p => p.WardCode.ToLower() == wardcode.Trim().ToLower());
         }
 
-        public async Task<List<AddressSaleDto>> GetAddressFullSale(List<int> wardIds)
-        {
-            var query = from w in await GetListWardsCacheAsync()
-                join d in await GetListDistrictAllCacheAsync() on w.DistrictId equals d.Id
-                join c in await GetListCitiesCacheAsync() on d.CityId equals c.Id
-                select new AddressSaleDto
-                {
-                    CityId = c.Id,
-                    DistrictId = d.Id,
-                    WardId = w.Id
-                };
-            return query.Where(x=>wardIds.Contains(x.WardId)).ToList();
-        }
+        
     }
 }

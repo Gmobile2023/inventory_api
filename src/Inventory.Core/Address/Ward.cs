@@ -1,12 +1,10 @@
-﻿using HLS.Topup.Common;
-using HLS.Topup.Address;
-using System;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Abp.Domain.Entities.Auditing;
 using Abp.Domain.Entities;
+using Abp.Domain.Entities.Auditing;
+using Inventory.Common;
 
-namespace HLS.Topup.Address
+namespace Inventory.Address
 {
 	[Table("Wards")]
     public class Ward : AuditedEntity , IMayHaveTenant

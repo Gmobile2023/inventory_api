@@ -1,7 +1,6 @@
 ﻿using Abp.Application.Services.Dto;
-using System;
 
-namespace HLS.Topup.Address.Dtos
+namespace Inventory.Address.Dtos
 {
     public class GetAllCountriesInput : PagedAndSortedResultRequestDto
     {

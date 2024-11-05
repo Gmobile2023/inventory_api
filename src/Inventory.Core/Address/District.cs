@@ -1,12 +1,9 @@
-﻿using HLS.Topup.Common;
-using HLS.Topup.Address;
-using System;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Abp.Domain.Entities.Auditing;
 using Abp.Domain.Entities;
+using Inventory.Common;
 
-namespace HLS.Topup.Address
+namespace Inventory.Address
 {
     [Table("Districts")]
     public class District : Entity, IMayHaveTenant
