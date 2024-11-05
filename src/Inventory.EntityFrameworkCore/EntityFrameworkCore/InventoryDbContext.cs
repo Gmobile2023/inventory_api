@@ -1,4 +1,5 @@
 ﻿using Abp.Zero.EntityFrameworkCore;
+using Inventory.Address;
 using Microsoft.EntityFrameworkCore;
 using Inventory.Authorization.Delegation;
 using Inventory.Authorization.Roles;
@@ -28,15 +29,20 @@ namespace Inventory.EntityFrameworkCore
         public virtual DbSet<SubscriptionPayment> SubscriptionPayments { get; set; }
 
         public virtual DbSet<Invoice> Invoices { get; set; }
-
-
-        public virtual DbSet<SubscriptionPaymentExtensionData> SubscriptionPaymentExtensionDatas { get; set; }
-
-        public virtual DbSet<UserDelegation> UserDelegations { get; set; }
         
+        public virtual DbSet<SubscriptionPaymentExtensionData> SubscriptionPaymentExtensionDatas { get; set; }
+        public virtual DbSet<UserDelegation> UserDelegations { get; set; }
         public virtual DbSet<RecentPassword> RecentPasswords { get; set; }
 
-        public InventoryDbContext(DbContextOptions<InventoryDbContext> options)
+        public virtual DbSet<District> Districts { get; set; }
+
+        public virtual DbSet<City> Cities { get; set; }
+
+        public virtual DbSet<Country> Countries { get; set; }
+        
+        public virtual DbSet<Ward> Wards { get; set; }
+
+    public InventoryDbContext(DbContextOptions<InventoryDbContext> options)
             : base(options)
         {
 

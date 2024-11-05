@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore;
 namespace Inventory.Address
 {
     // [AbpAuthorize(AppPermissions.Pages_Wards)]
-    public class WardsAppService : InventoryServiceBase, IWardsAppService
+    public class WardsAppService : InventoryAppServiceBase, IWardsAppService
     {
         private readonly IRepository<Ward> _wardRepository;
         private readonly IRepository<District, int> _lookup_districtRepository;

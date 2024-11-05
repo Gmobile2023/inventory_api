@@ -48,5 +48,10 @@
     <ProjectReference Include="..\Inventory.Core.Shared\Inventory.Core.Shared.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Remove="Address\IAddressManager.cs" />
+    <Compile Remove="Address\AddressManager.cs" />
+  </ItemGroup>
+
 </Project>
 

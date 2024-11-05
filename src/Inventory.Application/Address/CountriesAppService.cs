@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore;
 namespace Inventory.Address
 {
 	// [AbpAuthorize(AppPermissions.Pages_Countries)]
-    public class CountriesAppService : InventoryServiceBase, ICountriesAppService
+    public class CountriesAppService : InventoryAppServiceBase, ICountriesAppService
     {
 		 private readonly IRepository<Country> _countryRepository;
 		 // private readonly ICountriesExcelExporter _countriesExcelExporter;
@@ -96,9 +96,7 @@ namespace Inventory.Address
 			{
 				country.TenantId = (int?) AbpSession.TenantId;
 			}
-   
-   
-            await _countryRepository.InsertAsync(country);
+			await _countryRepository.InsertAsync(country);
          }
 
 		 // [AbpAuthorize(AppPermissions.Pages_Countries_Edit)]

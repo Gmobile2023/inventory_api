@@ -4,7 +4,7 @@ using Inventory.Common;
 
 namespace Inventory.Address.Dtos
 {
-    public abstract class CreateOrEditCountryDto : EntityDto<int?>
+    public class CreateOrEditCountryDto : EntityDto<int?>
     {
 
 		[Required]
@@ -18,8 +18,5 @@ namespace Inventory.Address.Dtos
 
 
 		public CommonConst.CountryStatus Status { get; set; }
-
-
-
     }
 }
