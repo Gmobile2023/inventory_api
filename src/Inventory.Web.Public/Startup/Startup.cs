@@ -35,17 +35,6 @@ namespace Inventory.Web.Public.Startup
 
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
-            services.AddCors(options =>
-            {
-                options.AddPolicy("AllowAllOrigins",
-                    builder =>
-                    {
-                        builder
-                            .AllowAnyOrigin()  
-                            .AllowAnyMethod()
-                            .AllowAnyHeader();
-                    });
-            });
             //MVC
             services.AddControllersWithViews(options =>
             {
@@ -75,13 +64,11 @@ namespace Inventory.Web.Public.Startup
                         : "log4net.Production.config")
                 );
             });
-            
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
         {
             app.UseAbp(); //Initializes ABP framework.
-            app.UseCors("AllowAllOrigins");
 
             if (env.IsDevelopment())
             {
