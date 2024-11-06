@@ -57,6 +57,7 @@ namespace Inventory.Address
                         CityCode = o.CityCode,
                         CityName = o.CityName,
                         Status = o.Status,
+                        CountryId = o.CountryId,
                         Id = o.Id
                     },
                     CountryCountryName = s1 == null || s1.CountryName == null ? "" : s1.CountryName.ToString()
