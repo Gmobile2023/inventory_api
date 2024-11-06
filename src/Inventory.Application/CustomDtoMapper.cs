@@ -12,6 +12,8 @@ using Abp.Organizations;
 using Abp.UI.Inputs;
 using Abp.Webhooks;
 using AutoMapper;
+using Inventory.Address;
+using Inventory.Address.Dtos;
 using Inventory.Auditing.Dto;
 using Inventory.Authorization.Accounts.Dto;
 using Inventory.Authorization.Delegation;
@@ -75,8 +77,16 @@ namespace Inventory
             configuration.CreateMap<RoleEditDto, Role>().ReverseMap();
             configuration.CreateMap<Role, RoleListDto>();
             configuration.CreateMap<UserRole, UserListRoleDto>();
-
             
+            //Address
+            configuration.CreateMap<CreateOrEditWardDto, Ward>().ReverseMap();
+            configuration.CreateMap<WardDto, Ward>().ReverseMap();
+            configuration.CreateMap<CreateOrEditDistrictDto, District>().ReverseMap();
+            configuration.CreateMap<DistrictDto, District>().ReverseMap();
+            configuration.CreateMap<CreateOrEditCityDto, City>().ReverseMap();
+            configuration.CreateMap<CityDto, City>().ReverseMap();
+            configuration.CreateMap<CreateOrEditCountryDto, Country>().ReverseMap();
+            configuration.CreateMap<CountryDto, Country>().ReverseMap();
 
             //Edition
             configuration.CreateMap<EditionEditDto, SubscribableEdition>().ReverseMap();
